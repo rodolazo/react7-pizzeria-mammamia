@@ -7,12 +7,14 @@ import headerTotal from "../assets/shopping-cart2.png";
 import headerRegister from "../assets/register.png";
 import { Link } from "react-router-dom";
 import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
   // Variables para saber cómo se mostrará la barra de navegación
   const { total } = useContext(CartContext);
-  const token = false; // Simulación de estado de autenticación
+  const { token, logout} = useContext(UserContext);
+  
 
   return (
     <>
@@ -34,6 +36,7 @@ const Navbar = () => {
             <img className="navbar__icon" src={headerProfile}></img> Profile
           </li>
           <li
+            onClick={logout}
             className={`navbar__item navbar__item_link ${
               token ? "activo" : "inactivo"
             }`}
