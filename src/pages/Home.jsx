@@ -1,21 +1,18 @@
+import {useContext} from 'react';
 import Header from "../componentes/Header";
 import CardPizza from "../componentes/CardPizza";
-//import data from "../../pizzas.js";
-import {useState, useEffect, useContext} from 'react';
 import { CartContext } from "../context/CartContext";
+import { PizzaContext } from '../context/PizzaContext';
+
+
+
 
 const Home = () => {
-  const [pizzas, setPizzas] = useState([]);  
+  const {pizzas, loading} = useContext(PizzaContext);
   const {addToCart} = useContext(CartContext);
 
-  useEffect( () => {
-    const obtenerDatos = async () => {
-      const respuesta = await fetch('http://localhost:5000/api/pizzas');
-      const datos = await respuesta.json();
-      setPizzas(datos);      
-    };
-    obtenerDatos();
-  }, []);
+  if (loading) return <p>Cargando pizzas...</p>;
+  
 
   return (
       <>        
