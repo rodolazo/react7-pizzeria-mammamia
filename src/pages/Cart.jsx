@@ -1,9 +1,12 @@
 import { useContext } from "react";
 import { Button } from 'react-bootstrap';
 import { CartContext } from "../context/CartContext.jsx";
+import { UserContext } from "../context/UserContext.jsx";
 
 const Cart = () => {
   const { cart, setCart, total, setTotal } = useContext(CartContext);
+  const { token } = useContext(UserContext);
+
 
   const handleCantidad = (index, accion) => {
     const nuevoCart = [...cart];
@@ -82,7 +85,7 @@ const Cart = () => {
       </ul>
       <div className="cart__resumen">
         <p>Total: <span id="total">{`Total: $ ${total.toLocaleString("es-ES")}`}</span></p>
-        <Button className="btn btn-dark" onClick={() => alert(`Total: $ ${total.toLocaleString("es-ES")}`)}>Finalizar compra</Button>
+        <Button disabled={!token} className="btn btn-dark" onClick={() => alert(`Total: $ ${total.toLocaleString("es-ES")}`)}>Finalizar compra</Button>
       </div>
     </section>
   );

@@ -33,7 +33,9 @@ const Navbar = () => {
               token ? "activo" : "inactivo"
             }`}
           >
-            <img className="navbar__icon" src={headerProfile}></img> Profile
+            <Link className="text-white text-decoration-none" to="/profile">
+              <img className="navbar__icon" src={headerProfile}></img> Profile
+            </Link>
           </li>
           <li
             onClick={logout}

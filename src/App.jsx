@@ -1,7 +1,8 @@
 import "./App.css";
+import { Routes, Route , Navigate} from "react-router-dom";
+import { useContext } from "react";
 import Navbar from "./componentes/Navbar";
 import Footer from "./componentes/Footer";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
@@ -10,26 +11,25 @@ import Pizza from "./pages/Pizza";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound.jsx";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CartProvider from "./context/CartContext.jsx";
+import { UserContext } from "./context/UserContext.jsx";
 
 function App() {
+
+  const {token } = useContext(UserContext);
+  console.log(`Mi token es: ${token}`)
   return (
     <>
-      <CartProvider>
-        <BrowserRouter basename="/react7-pizzeria-mammamia">
-          <Navbar />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/pizza/:id" element={<Pizza />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-          <Footer />
-      </BrowserRouter>
-      </CartProvider>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />                    
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/pizza/:id" element={<Pizza />} />
+          <Route path="/profile" element={token?<Profile/>:<Navigate to="/login"></Navigate>} />
+          <Route path="/login" element={token?<Navigate to="/"></Navigate>:<Login/>} />
+          <Route path="/register" element={token?<Navigate to="/"></Navigate>:<Register />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <Footer />
     </>
   );
 }
