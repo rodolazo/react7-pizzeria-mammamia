@@ -1,29 +1,38 @@
-
 import { createContext, useState } from "react";
 
-export const  UserContext = createContext();
+export const UserContext = createContext();
 
+const UserProvider = ({ children }) => {
+  // Leer el valor guardado en localStorage o asumir `true` por defecto
+  const [token, setToken] = useState(() => {
+    const stored = localStorage.getItem("token");
 
+    if (stored === null) {
+      // Primera vez que abre la app → lo dejamos como `true`
+      localStorage.setItem("token", "true");
+      return true;
+    }
 
-const UserProvider = ({children}) => {
+    return stored === "true"; // Convertimos string a boolean
+  });
 
-	const [token, setToken] = useState(true);
+  //Lo usare más adelante para el login
+  const login = () => {
+    localStorage.setItem("token", "true");
+    setToken(true);
+  };
 
-	// Método para cerrar sesión
-  	const logout = () => {
-  		setToken(false);
-  	};
-
-  	return (
-    <>
-    	<UserContext.Provider value={{token, logout}}>
-    		{children}
-    	</UserContext.Provider>
-    </>
-  );
   
+  const logout = () => {
+    localStorage.setItem("token", "false");
+    setToken(false);
+  };
+
+  return (
+    <UserContext.Provider value={{ token, login, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
 };
 
 export default UserProvider;
-
-

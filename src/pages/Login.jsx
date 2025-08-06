@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { UserContext } from "../context/UserContext";
+
 
 const Login = () => {
 	const [email, setEmail] =useState("");
 	const [password, setPassword] = useState("");	
 	const [error, setError] = useState("false");
 	const [mensaje, setMensaje] =useState("");
+	const {login} = useContext(UserContext);
 
 	const validarDatos = (e)=>{
 		e.preventDefault()
@@ -57,6 +60,7 @@ const Login = () => {
 		    	</Row>
 				<Button 
 					type="submit"
+					onClick={login}
 					className="btn btn-primary mb-5"
 					variant="primary"
 					>Enviar
