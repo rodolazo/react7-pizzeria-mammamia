@@ -1,9 +1,16 @@
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const CardPizza = ({ pizza: { desc, id, img, ingredients, name, price }, addCarrito }) => {
   const precioFormateado = price
     .toString()
     .replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+  const navegar = useNavigate();
+
+  const handleDetalles = () => {
+    navegar(`/pizza/${id}`);
+  }
 
   return (
     <div className="cardpizza">
@@ -17,7 +24,7 @@ const CardPizza = ({ pizza: { desc, id, img, ingredients, name, price }, addCarr
       </ul>
       <p className="cardpizza__precio">Precio: {`$ ${precioFormateado}`}</p>
       <div className="cardpizza__botones">
-        <button className="cardpizza__boton">Ver más</button>
+        <button className="cardpizza__boton" onClick={handleDetalles}>Ver más</button>
         <button className="cardpizza__boton cardpizza__boton_comprar" onClick={addCarrito}>
           Añadir
         </button>

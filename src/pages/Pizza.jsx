@@ -1,25 +1,18 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext} from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { PizzaContext } from "../context/PizzaContext";
+import { CartContext } from "../context/CartContext";
 
 const Pizza = () => {	
+	const { id } = useParams(); // captura el ID dinámico de la URL
+  const { pizzas, loading } = useContext(PizzaContext); // accede a todas las pizzas
+  const { addToCart } = useContext(CartContext); // accede al método para añadir al carrito
 
-	//Estados de la pizza
-	const [pizza, setPizza] = useState({});	
-	const [precioFormateado, setPrecioFormateado] = useState("");
-	
+  const [precioFormateado, setPrecioFormateado] = useState("");
 
-	useEffect( () => {
+  const pizza = pizzas.find((p) => p.id === id);
 
-    const obtenerDatos = async () => {
-      const respuesta = await fetch('http://localhost:5000/api/pizzas/p001');
-      const objetoPizza = await respuesta.json();
-      setPizza(objetoPizza);      
-    };
-
-    obtenerDatos();
-
-  }, []);
-
-	//De esta manera me aseguro que ya tengo el valor de price
+  //De esta manera me aseguro que ya tengo el valor de price
 	useEffect(() => {
 		if (pizza.price !== undefined) {
 			const precio = pizza.price
@@ -29,6 +22,11 @@ const Pizza = () => {
     	}
     }, [pizza]);
 
+	if (loading) return <p>Cargando pizza...</p>;
+
+  if (!pizza) return <p>Pizza no encontrada</p>;
+
+  const navegar = useNavigate();
 
   return (
   <>
@@ -40,8 +38,8 @@ const Pizza = () => {
 	        <p className="cardpizza__ingredientes">{pizza.ingredients.join(", ")}</p>
 	        <p className="cardpizza__precio">{`Precio: $ ${precioFormateado}`}</p>
 	        <div className="cardpizza__botones">
-	        	<button className="cardpizza__boton">Ver más</button>
-	        	<button className="cardpizza__boton cardpizza__boton_comprar">
+	        	<button className="cardpizza__boton" onClick={ () => navegar(-1)}>Volver</button>
+	        	<button className="cardpizza__boton cardpizza__boton_comprar"  onClick={ () => addToCart(pizza)}>
 	        		Añadir
 	        	</button>
 	        </div>
